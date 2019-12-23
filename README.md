@@ -6,7 +6,7 @@ Our team's goal was replace dataset to car-dataset.
 We use  [car-dataset from stanford](https://ai.stanford.edu/~jkrause/cars/car_dataset.html). 
 
 First, we remove image's background by [Mask-Rcnn](https://github.com/facebookresearch/maskrcnn-benchmark). Mask-Rcnn help us gereate mask only for the biggest car in image and crop image by it's bounding box.
-
+<img src='https://raw.githubusercontent.com/tony92151/pytorch-car-pix2pix/master/imgs/flow.jpg' width="600px"/>
 
 # Data preprocessing
 
