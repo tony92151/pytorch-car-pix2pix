@@ -6,6 +6,7 @@ Our team's goal was replace dataset to car-dataset.
 We use  [car-dataset from stanford](https://ai.stanford.edu/~jkrause/cars/car_dataset.html). 
 
 First, we remove image's background by [Mask-Rcnn](https://github.com/facebookresearch/maskrcnn-benchmark). Mask-Rcnn help us gereate mask only for the biggest car in image and crop image by it's bounding box.
+
 <img src='https://raw.githubusercontent.com/tony92151/pytorch-car-pix2pix/master/imgs/flow.jpg' width="600px"/>
 
 # Data preprocessing
@@ -24,8 +25,9 @@ python test.py --dataroot /home/u2546764/pytorch-car-pix2pix/datasets/car_data -
 
 # Facing problem
 1. data preprocessing resizing
-2. data i/o speed
-
+2. [data i/o speed](https://github.com/tony92151/pytorch-car-pix2pix/commit/280195fff39daa1dbedb7a98212f087b18ec7ed6#diff-ed1377284a526e0e538bf75912429515)
+method: Load all data to memory
+result: reduce about 20% training time
 # Hardware
 ```
 32 core cpu
