@@ -2,6 +2,9 @@ import os.path
 from data.base_dataset import BaseDataset, get_params, get_transform
 from data.image_folder import make_dataset
 from PIL import Image
+import cv2
+import time
+import datetime
 
 
 class AlignedDataset(BaseDataset):
@@ -23,6 +26,30 @@ class AlignedDataset(BaseDataset):
         assert(self.opt.load_size >= self.opt.crop_size)   # crop_size should be smaller than the size of loaded image
         self.input_nc = self.opt.output_nc if self.opt.direction == 'BtoA' else self.opt.input_nc
         self.output_nc = self.opt.input_nc if self.opt.direction == 'BtoA' else self.opt.output_nc
+        
+
+        img = Image.open(self.AB_paths[0]).convert('RGB')
+        w, h = img.size
+        w2 = int(w / 2)
+        self.A = []
+        self.B = []
+        print("================================================")
+        print("Load images to memory")
+        t = time.time()
+        for i in range(len(self.AB_paths)):
+            image = Image.open(self.AB_paths[i]).convert('RGB')
+            A = image.crop((0, 0, w2, h))
+            B = image.crop((w2, 0, w, h))
+            transform_params = get_params(self.opt, A.size)
+            A_transform = get_transform(self.opt, transform_params, grayscale=(self.input_nc == 1))
+            B_transform = get_transform(self.opt, transform_params, grayscale=(self.output_nc == 1))
+            A = A_transform(A)
+            B = B_transform(B)
+            self.A.append(A)
+            self.B.append(B)
+        print("Done")
+        print("Take",datetime.timedelta(seconds = int(time.time()-t)),"seconds")
+        print("================================================")
 
     def __getitem__(self, index):
         """Return a data point and its metadata information.
@@ -38,21 +65,26 @@ class AlignedDataset(BaseDataset):
         """
         # read a image given a random integer index
         AB_path = self.AB_paths[index]
-        AB = Image.open(AB_path).convert('RGB')
+        #AB = Image.open(AB_path).convert('RGB')
+        #AB = Image.fromarray(cv2.cvtColor(self.AB[index],cv2.COLOR_BGR2RGB)
+        #AB = self.AB[index]
         # split AB image into A and B
-        w, h = AB.size
-        w2 = int(w / 2)
-        A = AB.crop((0, 0, w2, h))
-        B = AB.crop((w2, 0, w, h))
-
+        #w, h = AB.size
+        #w2 = int(w / 2)
+        #A = AB.crop((0, 0, w2, h))
+        #B = AB.crop((w2, 0, w, h))
+        #A = self.A[index]
+        #B = self.B[index]
+                          
         # apply the same transform to both A and B
-        transform_params = get_params(self.opt, A.size)
-        A_transform = get_transform(self.opt, transform_params, grayscale=(self.input_nc == 1))
-        B_transform = get_transform(self.opt, transform_params, grayscale=(self.output_nc == 1))
+        #transform_params = get_params(self.opt, A.size)
+        #A_transform = get_transform(self.opt, transform_params, grayscale=(self.input_nc == 1))
+        #B_transform = get_transform(self.opt, transform_params, grayscale=(self.output_nc == 1))
 
-        A = A_transform(A)
-        B = B_transform(B)
-
+        #A = A_transform(A)
+        #B = B_transform(B)
+        A = self.A[index]
+        B = self.B[index]
         return {'A': A, 'B': B, 'A_paths': AB_path, 'B_paths': AB_path}
 
     def __len__(self):
