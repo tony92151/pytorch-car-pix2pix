@@ -23,6 +23,11 @@ python train.py --dataroot /home/u2546764/pytorch-car-pix2pix/datasets/car_data 
 python test.py --dataroot /home/u2546764/pytorch-car-pix2pix/datasets/car_data --direction BtoA --model pix2pix --name car_pix2pix
 ```
 
+# [Demo](https://github.com/tony92151/pytorch-car-pix2pix/blob/master/data_preprocessing/pix2pix_demo.ipynb) 
+
+
+
+
 # Facing problem
 1. data preprocessing resizing
 2. [data i/o speed](https://github.com/tony92151/pytorch-car-pix2pix/commit/280195fff39daa1dbedb7a98212f087b18ec7ed6#diff-ed1377284a526e0e538bf75912429515)
